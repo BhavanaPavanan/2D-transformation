@@ -1,17 +1,20 @@
 import numpy as np
 import matplotlib.pyplot as plt
+
 def translation_matrix(tx, ty):
-   return np.array([
+    return np.array([
         [1, 0, tx],
         [0, 1, ty],
         [0, 0, 1]
     ])
+
 def scaling_matrix(sx, sy):
     return np.array([
         [sx, 0, 0],
         [0, sy, 0],
         [0, 0, 1]
     ])
+
 def rotation_matrix(angle):
     radians = np.deg2rad(angle)
     return np.array([
@@ -19,26 +22,32 @@ def rotation_matrix(angle):
         [np.sin(radians), np.cos(radians), 0],
         [0, 0, 1]
     ])
+
 def apply_transformation(points, transformation_matrix):
     homogeneous_points = np.hstack((points, np.ones((points.shape[0], 1))))
     transformed_points = homogeneous_points @ transformation_matrix.T
     return transformed_points[:, :2]
+
 def plot_transformation(original, transformed):
     plt.figure(figsize=(8, 8))
-   # Close the shape by appending the first point to the end
+
+    # Close the shape by appending the first point to the end
     original = np.vstack((original, original[0]))
     transformed = np.vstack((transformed, transformed[0]))
 
     plt.plot(original[:, 0], original[:, 1], 'bo-', label='Original Square')
     plt.plot(transformed[:, 0], transformed[:, 1], 'ro-', label='Transformed Square')
-     plt.xlim(-10, 10)
+
+    plt.xlim(-10, 10)
     plt.ylim(-10, 10)
     plt.axhline(0, color='black', linewidth=0.5)
     plt.axvline(0, color='black', linewidth=0.5)
     plt.grid(color='gray', linestyle='--', linewidth=0.5)
+
     plt.legend()
     plt.title("2D Square Transformation")
     plt.show()
+
 def main():
     # Define a unit square
     points = np.array([
@@ -47,16 +56,24 @@ def main():
         [1, 1],
         [0, 1]
     ])
- print("Original Square Points:")
+
+    print("Original Square Points:")
     print(points)
- # Define transformations
+
+    # Define transformations
     translate = translation_matrix(3, 2)  # Move square by (3, 2)
     scale = scaling_matrix(2, 1.5)        # Scale by (2x, 1.5x)
     rotate = rotation_matrix(30)          # Rotate by 30 degrees
- # Composite transformation: T * S * R (Order matters!)
+
+    # Composite transformation: T * S * R (Order matters!)
     composite_transform = translate @ scale @ rotate
- transformed_points = apply_transformation(points, composite_transform)
- print("\nTransformed Square Points:")
+
+    transformed_points = apply_transformation(points, composite_transform)
+
+    print("\nTransformed Square Points:")
     print(transformed_points)
-plot_transformation(points, transformed_points)
-if _name_ == "_main_":	    main()
+
+    plot_transformation(points, transformed_points)
+
+if __name__ == "__main__":
+    main()
